@@ -14,7 +14,7 @@ public static class Presets
 
     public enum EventMarkerChannelInfo
     {
-        FlashingBlockStartMarker = 0,
+        FlashingBlockMarker = 0,
         FlashingMarker = 1,
         FlashingRowOrColumnMarker = 2,
         FlashingRowOrColumnIndexMarker = 3,
