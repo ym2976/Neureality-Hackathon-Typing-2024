@@ -14,11 +14,11 @@ public static class Presets
 
     public enum EventMarkerChannelInfo
     {
-        FlashingBlockStartMarker = 1,
-        FlashingMarker = 2,
-        FlashingRowOrColumnMarker = 3,
-        FlashingRowOrColumnIndexMarker = 4,
-        FlashingTargetMarker = 5
+        FlashingBlockStartMarker = 0,
+        FlashingMarker = 1,
+        FlashingRowOrColumnMarker = 2,
+        FlashingRowOrColumnIndexMarker = 3,
+        FlashingTargetMarker = 4
     }
 
     public enum Letters
@@ -64,9 +64,9 @@ public static class Presets
 
     public enum GameState
     {
-        IdleState,
-        TrainState,
-        TestState,
+        IdleState = 0,
+        TrainState = 1,
+        TestState = 2,
     }
 
     public enum BoardState
