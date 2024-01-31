@@ -88,6 +88,13 @@ public class BoardController : MonoBehaviour
     // create the Presets.Letters AND LetterController dictionary
     public Dictionary<Presets.Letters, LetterController> letterControllerDict = new Dictionary<Presets.Letters, LetterController>();
 
+
+    [Header("Train Test IEnumerator")]
+    public IEnumerator trainCoroutine;
+    public IEnumerator testCoroutine;
+
+
+
     void Start()
     {
         ContinueButton.onClick.AddListener(ContinueButtonClicked);
@@ -187,12 +194,13 @@ public class BoardController : MonoBehaviour
             {
                 gameManager.SetIdleState();
                 return;
-
             }
             else
             {
                 Presets.Letters targetLetter = trainLetters[0];
-                StartCoroutine(TrainIEnumerator(targetLetter));
+                trainCoroutine = TrainIEnumerator(targetLetter);
+
+                StartCoroutine(trainCoroutine);
 
                 // remove the fist letter from the list
                 trainLetters.RemoveAt(0);
@@ -202,9 +210,9 @@ public class BoardController : MonoBehaviour
         }
         else if (gameManager.gameState == Presets.GameState.TestState)
         {
-            StartCoroutine(TestIEnumerator());
+            testCoroutine = TestIEnumerator();
+            StartCoroutine(testCoroutine);
         }
-
         DeactivateContinueButton();
     }
 
@@ -223,7 +231,6 @@ public class BoardController : MonoBehaviour
     // flash settings
     public IEnumerator TrainIEnumerator(Presets.Letters targetLetter)
     {
-
 
         SetAllLettersOffColor();
 
@@ -295,8 +302,11 @@ public class BoardController : MonoBehaviour
 
         }
         yield return new WaitForSeconds(Presets.FlashEndRestDuration);
-        ActivateContinueButton();
-        SetAllLettersOnColor();
+        ResetBoardGUI();
+
+
+        // TODO: wait for the train RPC to finish
+
 
     }
 
@@ -305,18 +315,84 @@ public class BoardController : MonoBehaviour
     public IEnumerator TestIEnumerator()
     {
 
-        // send event marker
+        SetAllLettersOffColor();
 
-        Debug.Log("TestIEnumerator Start");
+
+
+        Debug.Log("TrainIEnumerator Start");
         yield return new WaitForSeconds(Presets.BoardEnableWaitTime);
         Debug.Log("Flash Start");
 
 
 
+        int repeatTimes = repeatTimesTest;
 
+        // turn on the target letter hint
+        SetAllLettersOnColor();
+        yield return new WaitForSeconds(Presets.LetterTrainHintHighlightDuration); // turn all the board on for a while before the flashing starts
+        SetAllLettersOffColor();
+
+        yield return new WaitForSeconds(Presets.WaitDurationBeforeStartFlashing);
+
+        for (int i = 0; i < repeatTimes; i++)
+        {
+
+            // copy   flashingSequence
+            List<List<int>> flashingSequenceCopy = new List<List<int>>(flashingSequence);
+
+            Utils.Shuffle(flashingSequenceCopy);
+
+            foreach (List<int> index in flashingSequenceCopy)
+            {
+
+                int raw_col_indicator = index[0];
+                int index_indicator = index[1];
+
+                if (raw_col_indicator == 1)
+                {
+                    // turn on the index_indicator row
+                    for (int j = 0; j < 6; j++)
+                    {
+                        LetterController letterController = boardControllers[index_indicator, j];
+                        letterController.SetLetterOnColor();
+                    }
+
+                }
+                else if (raw_col_indicator == 2)
+                {
+                    // turn on the target column
+                    for (int j = 0; j < 6; j++)
+                    {
+                        LetterController letterController = boardControllers[j, index_indicator];
+                        letterController.SetLetterOnColor();
+                    }
+                }
+
+                // the target is on
+
+                yield return new WaitForSeconds(flashDurationTest);
+                SetAllLettersOffColor();
+                yield return new WaitForSeconds(flashIntervelTest);
+
+            }
+
+            // now the flashing is done, wait for a while and exit
+
+
+            // set the continue button active
+
+        }
+        yield return new WaitForSeconds(Presets.FlashEndRestDuration);
+        ResetBoardGUI();
 
     }
 
+
+    public void ResetBoardGUI()
+    {
+        ActivateContinueButton();
+        SetAllLettersOnColor();
+    }
 
     public void ActivateContinueButton()
     {
@@ -351,6 +427,25 @@ public class BoardController : MonoBehaviour
                 letterController.SetLetterOnColor();
             }
         }
+    }
+
+
+    public void InterruptBoard()
+    {
+        if (trainCoroutine != null)
+        {
+            StopCoroutine(trainCoroutine);
+            Debug.Log("Train Coroutine Stopped");
+        }
+        if (testCoroutine != null)
+        {
+            StopCoroutine(testCoroutine);
+            Debug.Log("Test Coroutine Stopped");
+        }
+
+        ResetBoardGUI();
+
+        // todo: send interrupt signal to the server
     }
 
 }

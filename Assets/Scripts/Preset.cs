@@ -5,6 +5,21 @@ using UnityEngine;
 public static class Presets
 {
 
+    // LabStreamingLayer settings
+    public static string EventMarkerLSLOutletStreamName = "P300SpellerEventMarkerLSL";
+    public static string EventMarkerLSLOutletStreamType = "EventMarker";
+    public static string EventMarkerLSLOutletStreamID = "1";
+    public static int EventMarkerChannelNum = 6; // block marker index 0
+    public static float EventMarkerNominalSamplingRate = 1;
+
+    public enum EventMarkerChannelInfo
+    {
+        FlashingBlockStartMarker = 1,
+        FlashingMarker = 2,
+        FlashingRowOrColumnMarker = 3,
+        FlashingRowOrColumnIndexMarker = 4,
+        FlashingTargetMarker = 5
+    }
 
     public enum Letters
     {
@@ -54,6 +69,12 @@ public static class Presets
         TestState,
     }
 
+    public enum BoardState
+    {
+        IdelState,
+        RuningState,
+    }
+
 
 
     public static float BoardEnableWaitTime = 3.0f;
@@ -71,6 +92,12 @@ public static class Presets
 
     public static Color LetterTrainHintHighlightColor = new Color(0, 1, 0, 1);
     public static Color LetterPredictionHighlightColor = new Color(1, 0, 0, 1);
+
+
+
+
+    // key settings
+    public static KeyCode InterruptKey = KeyCode.Escape;
 
 
 }

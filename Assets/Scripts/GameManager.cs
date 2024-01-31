@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +35,8 @@ public class GameManager : MonoBehaviour
     public GameObject WelcomeStateGUI;
     public GameObject TrailStateGUI;
 
+
+
     void Start()
     {
         // set the game state to idle
@@ -45,6 +48,8 @@ public class GameManager : MonoBehaviour
         StartTrainButton.onClick.AddListener(TrainButtonClicked);
         StartTestButton.onClick.AddListener(TestButtonClicked);
 
+
+
     }
 
 
@@ -52,8 +57,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        
+        InterruptButtonPresssed();
+
+
     }
 
     public void TrainButtonClicked()
@@ -98,6 +104,23 @@ public class GameManager : MonoBehaviour
     }
 
 
+
+    public void InterruptButtonPresssed()
+    {
+
+        // check if the esc button been pressed
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // check if the game state is in training state
+            if (gameState == Presets.GameState.TrainState || gameState == Presets.GameState.TestState)
+            {
+                boardController.InterruptBoard();
+            }
+
+            SetIdleState();
+        }
+
+    }
 
 
 }
