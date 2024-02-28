@@ -9,16 +9,22 @@ public static class Presets
     public static string EventMarkerLSLOutletStreamName = "P300SpellerEventMarkerLSL";
     public static string EventMarkerLSLOutletStreamType = "EventMarker";
     public static string EventMarkerLSLOutletStreamID = "1";
-    public static int EventMarkerChannelNum = 6; // block marker index 0
+    public static int EventMarkerChannelNum = 5;
     public static float EventMarkerNominalSamplingRate = 1;
 
     public enum EventMarkerChannelInfo
     {
-        FlashingBlockMarker = 0,
-        FlashingMarker = 1,
-        FlashingRowOrColumnMarker = 2,
-        FlashingRowOrColumnIndexMarker = 3,
-        FlashingTargetMarker = 4
+        FlashingTrailMarker = 0, // Train 1, -1 Test 2, -2
+        FlashingMarker = 1, // 1 means active
+        FlashingRowOrColumnMarker = 2, // 1 means row, 2 means column
+        FlashingRowOrColumnIndexMarker = 3, // 0 - 5
+        FlashingTargetMarker = 4 // 1 is target, 0 is non-target
+    }
+
+    public enum TrailMarker
+    {
+        TrainMarker = 1,
+        TestMarker = 2
     }
 
     public enum Letters

@@ -34,77 +34,36 @@ public class EventMarkerLSLOutletController : LSLOutletInterface
     }
 
 
-    public void SendFlashingBlockStartMarker(float blockMarker)
+    public void SendFlashingTrailStartMarker(float blockMarker)
     {
         float[] eventMarkerArray = createEventMarkerArrayFloat();
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingBlockMarker] = blockMarker;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTrailMarker] = blockMarker;
         streamOutlet.push_sample(eventMarkerArray);
     }
 
-    public void SendFlashingBlockEndMarker(float blockMarker)
+    public void SendFlashingTrailEndMarker(float blockMarker)
     {
         float[] eventMarkerArray = createEventMarkerArrayFloat();
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingBlockMarker] = blockMarker * -1.0f;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTrailMarker] = blockMarker * -1.0f;
         streamOutlet.push_sample(eventMarkerArray);
     }
 
-
-    public void SendEventMarker(float blockMarker)
+    public void SendFlashingMarker(float flashingRowOrColumnMarker, float flashingRowOrColumnIndexMarker, float flashingTargetMarker)
     {
+        float[] eventMarkerArray = createEventMarkerArrayFloat();
+        // flashing marker is 1 for all the time. It is used to indicate this is a flashing event
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingMarker] = 1.0f; 
 
+        // flashingRowOrColumnMarker is 1 for row and 2 for column
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingRowOrColumnMarker] = flashingRowOrColumnMarker;
+
+        // flashingRowOrColumnIndexMarker is the index of the row or column
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingRowOrColumnIndexMarker] = flashingRowOrColumnIndexMarker;
+
+        // flashingTargetMarker is the index of the target
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTargetMarker] = flashingTargetMarker;
+        streamOutlet.push_sample(eventMarkerArray);
     }
-
-
-
-
-
-    //public void sendStateOnEnterMarker(Presets.ExperimentState currentExperimentState)
-    //{
-
-    //    //float[] currentStateMarker = new float[] { (float)currentExperimentState, 0, 0, 0, 0 , 0};
-    //    //streamOutlet.push_sample(currentStateMarker);
-    //    float[] eventMarkerArray = createEventMarkerArrayFloat();
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.StateEnterExitMarker] = (float)currentExperimentState;
-    //    streamOutlet.push_sample(eventMarkerArray);
-    //}
-
-
-    //public void sendStateOnExitMarker(Presets.ExperimentState currentExperimentState)
-    //{
-    //    float[] eventMarkerArray = createEventMarkerArrayFloat();
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.StateEnterExitMarker] = (float)currentExperimentState * -1.0f; // revert the value to indicate exit
-    //    streamOutlet.push_sample(eventMarkerArray);
-    //}
-
-    //public void sendStateOnInterruptMarker()
-    //{
-    //    float[] eventMarkerArray = createEventMarkerArrayFloat();
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.StateInterruptMarker] = 1.0f; // revert the value to indicate exit
-    //    streamOutlet.push_sample(eventMarkerArray);
-    //}
-
-    //public void sendFlashBlockStartMarker()
-    //{
-    //    float[] eventMarkerArray = createEventMarkerArrayFloat();
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashBlockStartEndMarker] = 1.0f;
-    //    streamOutlet.push_sample(eventMarkerArray);
-    //}
-
-    //public void sendFlashBlockEndMarker()
-    //{
-    //    float[] eventMarkerArray = createEventMarkerArrayFloat();
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashBlockStartEndMarker] = -1.0f;
-    //    streamOutlet.push_sample(eventMarkerArray);
-    //}
-
-    //public void sendFlashMarker(float flashingMarker, float flashingItemIndexMarker, float targetFlashingMarker)
-    //{
-    //    float[] eventMarkerArray = createEventMarkerArrayFloat();
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingMarker] = flashingMarker;
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingItemIndexMarker] = flashingItemIndexMarker;
-    //    eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTargetMarker] = targetFlashingMarker;
-    //    streamOutlet.push_sample(eventMarkerArray);
-    //}
 
 
 

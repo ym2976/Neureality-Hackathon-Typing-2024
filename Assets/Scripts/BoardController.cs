@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Presets;
 
 public class BoardController : MonoBehaviour
 {
@@ -157,7 +158,6 @@ public class BoardController : MonoBehaviour
     {
         // copy the trainLetters
 
-
         this.trainLetters = new List<Presets.Letters>(trainLetters);
         this.repeatTimesTrain = repeatTimesTrain;
         this.flashDurationTrain = flashDurationTrain;
@@ -170,7 +170,6 @@ public class BoardController : MonoBehaviour
         this.repeatTimesTest = repeatTimesTest;
         this.flashDurationTest = flashDurationTest;
         this.flashIntervelTest = flashIntervelTest;
-
     }
 
 
@@ -183,9 +182,13 @@ public class BoardController : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// This function is called when the continue button is clicked
+    /// The function will start the train or test IEnumerator based on the game state
+    /// </summary>
     public void ContinueButtonClicked()
     {
+        
 
         if (gameManager.gameState == Presets.GameState.TrainState)
         {
@@ -193,6 +196,10 @@ public class BoardController : MonoBehaviour
             if (trainLetters.Count == 0)
             {
                 gameManager.SetIdleState();
+
+                // RPC call to the PhysioLabXR Scripting Interface to trigger the Training Event.
+                // TODO: Implement the RPC call to the PhysioLabXR Scripting Interface to trigger the Training Event.
+                
                 return;
             }
             else
@@ -227,10 +234,16 @@ public class BoardController : MonoBehaviour
 
 
 
-
-    // flash settings
+    /// <summary>
+    /// This IEnumerator will flash the board based on the train configuration set in the game manager
+    /// </summary>
+    /// <param name="targetLetter"></param>
+    /// <returns></returns>
     public IEnumerator TrainIEnumerator(Presets.Letters targetLetter)
     {
+        
+        // send the train trail start marker
+        gameManager.eventMarkerLSLOutletController.SendFlashingTrailStartMarker((float)Presets.TrailMarker.TrainMarker);
 
         SetAllLettersOffColor();
 
@@ -266,6 +279,7 @@ public class BoardController : MonoBehaviour
 
                 int raw_col_indicator = index[0];
                 int index_indicator = index[1];
+                bool target_flashing = false;
 
                 if(raw_col_indicator ==1)
                 {
@@ -274,8 +288,13 @@ public class BoardController : MonoBehaviour
                     {
                         LetterController letterController = boardControllers[index_indicator, j];
                         letterController.SetLetterOnColor();
-                    }
 
+                        // if the target letter is on, set the target_flashing to true
+                        if(targetLetterController == letterController)
+                        {
+                            target_flashing = true;
+                        }
+                    }
                 }
                 else if(raw_col_indicator == 2)
                 {
@@ -284,36 +303,59 @@ public class BoardController : MonoBehaviour
                     {
                         LetterController letterController = boardControllers[j, index_indicator];
                         letterController.SetLetterOnColor();
+
+                        // if the target letter is on, set the target_flashing to true
+                        if (targetLetterController == letterController)
+                        {
+                            target_flashing = true;
+                        }
                     }
                 }
 
                 // the target is on
+                // send the flashing marker
+                // raw_col_indicator: 1 for row, 2 for column
+                // index_indicator: the index of the row or column
+                // target_flashing: 1 for target flashing, 0 for non-target flashing
+                gameManager.eventMarkerLSLOutletController.SendFlashingMarker((float)raw_col_indicator, (float)index_indicator, target_flashing ? 1.0f : 0.0f);
+
 
                 yield return new WaitForSeconds(flashDurationTrain);
                 SetAllLettersOffColor();
                 yield return new WaitForSeconds(flashIntervelTrain);
 
+
             }
 
-            // now the flashing is done, wait for a while and exit
-
-
-            // set the continue button active
-
         }
+
+        yield return new WaitForSeconds(1.0f); 
+        // send the train trail end marker
+        gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TrainMarker);
+
+
         yield return new WaitForSeconds(Presets.FlashEndRestDuration);
         ResetBoardGUI();
 
 
-        // TODO: wait for the train RPC to finish
+        // TODO: RPC call to the PhysioLabXR Scripting Interface to trigger some Training Event if needed.
+
 
 
     }
 
-
+    /// <summary>
+    /// This IEnumerator will flash the board based on the test configuration set in the game manager
+    /// </summary>
+    /// <returns></returns>
 
     public IEnumerator TestIEnumerator()
     {
+
+        // send the test trail start marker
+        gameManager.eventMarkerLSLOutletController.SendFlashingTrailStartMarker((float)Presets.TrailMarker.TestMarker);
+
+
 
         SetAllLettersOffColor();
 
@@ -368,7 +410,11 @@ public class BoardController : MonoBehaviour
                     }
                 }
 
-                // the target is on
+                // send the flashing marker
+                // raw_col_indicator: 1 for row, 2 for column
+                // index_indicator: the index of the row or column
+                // target_flashing: always 0 for test
+                gameManager.eventMarkerLSLOutletController.SendFlashingMarker((float)raw_col_indicator, (float)index_indicator, 0.0f);
 
                 yield return new WaitForSeconds(flashDurationTest);
                 SetAllLettersOffColor();
@@ -376,14 +422,17 @@ public class BoardController : MonoBehaviour
 
             }
 
-            // now the flashing is done, wait for a while and exit
-
-
-            // set the continue button active
-
         }
+
+
+        yield return new WaitForSeconds(1.0f);
+        // send the test trail end marker
+        gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TestMarker);
+
         yield return new WaitForSeconds(Presets.FlashEndRestDuration);
         ResetBoardGUI();
+
+        // TODO: RPC call to the PhysioLabXR Scripting Interface to trigger the inference Event.
 
     }
 
@@ -445,7 +494,9 @@ public class BoardController : MonoBehaviour
 
         ResetBoardGUI();
 
-        // todo: send interrupt signal to the server
+        // TODO: RPC call to the PhysioLabXR Scripting Interface to trigger the Interrupt Event.
+        // For instance, you need to clear the buffer for the EEG signal data.
+
     }
 
 }
