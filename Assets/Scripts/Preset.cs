@@ -6,7 +6,7 @@ public static class Presets
 {
 
     // LabStreamingLayer settings
-    public static string EventMarkerLSLOutletStreamName = "P300SpellerEventMarkerLSL";
+    public static string EventMarkerLSLOutletStreamName = "CortexTypeP300SpellerEventMarkerLSL";
     public static string EventMarkerLSLOutletStreamType = "EventMarker";
     public static string EventMarkerLSLOutletStreamID = "1";
     public static int EventMarkerChannelNum = 5;
