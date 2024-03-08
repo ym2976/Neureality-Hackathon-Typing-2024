@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
     [Header("Event Marker LSL Outlet Controller")]
     public EventMarkerLSLOutletController eventMarkerLSLOutletController;
 
+    [Header("Prediction LSL Inlet Controller")]
+    public PredictionLSLInletController predictionLSLInletController;
+
 
     void Start()
     {

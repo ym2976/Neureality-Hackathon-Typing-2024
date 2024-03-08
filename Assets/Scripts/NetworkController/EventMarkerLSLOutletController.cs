@@ -37,14 +37,14 @@ public class EventMarkerLSLOutletController : LSLOutletInterface
     public void SendFlashingTrailStartMarker(float blockMarker)
     {
         float[] eventMarkerArray = createEventMarkerArrayFloat();
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTrailMarker] = blockMarker;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTrailMarkerIndex] = blockMarker;
         streamOutlet.push_sample(eventMarkerArray);
     }
 
     public void SendFlashingTrailEndMarker(float blockMarker)
     {
         float[] eventMarkerArray = createEventMarkerArrayFloat();
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTrailMarker] = blockMarker * -1.0f;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTrailMarkerIndex] = blockMarker * -1.0f;
         streamOutlet.push_sample(eventMarkerArray);
     }
 
@@ -52,16 +52,45 @@ public class EventMarkerLSLOutletController : LSLOutletInterface
     {
         float[] eventMarkerArray = createEventMarkerArrayFloat();
         // flashing marker is 1 for all the time. It is used to indicate this is a flashing event
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingMarker] = 1.0f; 
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingMarkerIndex] = 1.0f; 
 
         // flashingRowOrColumnMarker is 1 for row and 2 for column
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingRowOrColumnMarker] = flashingRowOrColumnMarker;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingRowOrColumnMarkerIndex] = flashingRowOrColumnMarker;
 
         // flashingRowOrColumnIndexMarker is the index of the row or column
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingRowOrColumnIndexMarker] = flashingRowOrColumnIndexMarker;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingRowOrColumnIndexMarkerIndex] = flashingRowOrColumnIndexMarker;
 
         // flashingTargetMarker is the index of the target
-        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTargetMarker] = flashingTargetMarker;
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.FlashingTargetMarkerIndex] = flashingTargetMarker;
+        streamOutlet.push_sample(eventMarkerArray);
+    }
+
+    public void SendTrainMarker()
+    {
+        float[] eventMarkerArray = createEventMarkerArrayFloat();
+
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.TrainMarkerIndex] = 1.0f;
+
+        streamOutlet.push_sample(eventMarkerArray);
+    }
+
+    public void SendTestMarker()
+    {
+        float[] eventMarkerArray = createEventMarkerArrayFloat();
+
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.TestMarkerIndex] = 1.0f;
+
+        streamOutlet.push_sample(eventMarkerArray);
+    }
+
+
+    public void SendInterruptMarker()
+    {
+
+        float[] eventMarkerArray = createEventMarkerArrayFloat();
+
+        eventMarkerArray[(int)Presets.EventMarkerChannelInfo.InterruptMarkerIndex] = 1.0f;
+
         streamOutlet.push_sample(eventMarkerArray);
     }
 

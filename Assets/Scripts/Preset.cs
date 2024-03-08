@@ -1,29 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public static class Presets
 {
 
     // LabStreamingLayer settings
+    public static string PredictionLSLInletStreamName = "CortexTypePredictionLSL";
+
     public static string EventMarkerLSLOutletStreamName = "CortexTypeP300SpellerEventMarkerLSL";
     public static string EventMarkerLSLOutletStreamType = "EventMarker";
     public static string EventMarkerLSLOutletStreamID = "1";
-    public static int EventMarkerChannelNum = 5;
+    public static int EventMarkerChannelNum = 8;
     public static float EventMarkerNominalSamplingRate = 1;
+
+    
 
     public enum EventMarkerChannelInfo
     {
-        FlashingTrailMarker = 0, // Train 1, -1 Test 2, -2
-        FlashingMarker = 1, // 1 means active
-        FlashingRowOrColumnMarker = 2, // 1 means row, 2 means column
-        FlashingRowOrColumnIndexMarker = 3, // 0 - 5
-        FlashingTargetMarker = 4 // 1 is target, 0 is non-target
+        
+        FlashingTrailMarkerIndex = 0, // Train 1, -1 Test 2, -2
+        FlashingMarkerIndex = 1, // 1 means active
+        FlashingRowOrColumnMarkerIndex = 2, // 1 means row, 2 means column
+        FlashingRowOrColumnIndexMarkerIndex = 3, // 0 - 5 which indicates the index of the row or column
+        FlashingTargetMarkerIndex = 4, // 1 is target, 0 is non-target
+
+        TrainMarkerIndex = 5, // send 1 to trigger start 
+        TestMarkerIndex = 6, // send 1 to trigger end
+        InterruptMarkerIndex = 7, // interrupt the train or test function
+
     }
 
     public enum TrailMarker
     {
-        TrainMarker = 1,
+        TrainMarker = 1, // 
         TestMarker = 2
     }
 

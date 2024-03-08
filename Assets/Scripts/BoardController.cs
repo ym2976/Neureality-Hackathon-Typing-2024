@@ -197,9 +197,9 @@ public class BoardController : MonoBehaviour
             {
                 gameManager.SetIdleState();
 
-                // RPC call to the PhysioLabXR Scripting Interface to trigger the Training Event.
-                // TODO: Implement the RPC call to the PhysioLabXR Scripting Interface to trigger the Training Event.
-                
+                // send the train marker to trigger train epochs function
+                gameManager.eventMarkerLSLOutletController.SendTrainMarker();
+
                 return;
             }
             else
@@ -222,15 +222,6 @@ public class BoardController : MonoBehaviour
         }
         DeactivateContinueButton();
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -430,10 +421,38 @@ public class BoardController : MonoBehaviour
         gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TestMarker);
 
         yield return new WaitForSeconds(Presets.FlashEndRestDuration);
+
+
+        // this will trigger the predict() in PhysioLabXR Scripting Interface
+        gameManager.eventMarkerLSLOutletController.SendTestMarker();
+        gameManager.predictionLSLInletController.clearBuffer();
+
+        bool predictionReceived = false;
+
+        while (!predictionReceived)
+        {
+            gameManager.predictionLSLInletController.pullPredictionSample();
+            if (gameManager.predictionLSLInletController.frameTimestamp != 0)
+            {
+                predictionReceived = true;
+            }
+            yield return new WaitForSeconds(0.2f); // wait for 0.2 second for pulling
+        }
+
+
+        // get the letter controller with predicted letter index in the board 
+        LetterController predictedLetterController = boardControllers[
+            (int)gameManager.predictionLSLInletController.frameDataBuffer[0],
+            (int)gameManager.predictionLSLInletController.frameDataBuffer[1]
+            ];
+
+        // turn on the predicted char for a second
+        predictedLetterController.SetLetterTrainHintHighlightColor();
+        yield return new WaitForSeconds(2.0f);
+        SetAllLettersOffColor();
+        yield return new WaitForSeconds(1.0f);
+
         ResetBoardGUI();
-
-        // TODO: RPC call to the PhysioLabXR Scripting Interface to trigger the inference Event.
-
     }
 
 
@@ -485,6 +504,8 @@ public class BoardController : MonoBehaviour
         {
             StopCoroutine(trainCoroutine);
             Debug.Log("Train Coroutine Stopped");
+
+            // send interrupt signal
         }
         if (testCoroutine != null)
         {
@@ -494,8 +515,8 @@ public class BoardController : MonoBehaviour
 
         ResetBoardGUI();
 
-        // TODO: RPC call to the PhysioLabXR Scripting Interface to trigger the Interrupt Event.
-        // For instance, you need to clear the buffer for the EEG signal data.
+        // send interrupt signal via LSL
+        gameManager.eventMarkerLSLOutletController.SendInterruptMarker();
 
     }
 
