@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9310,11 +9310,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainLetters: 
   repeatTimesTrain: 5
+  flashMinFrequencyTrainRow: 0
+  flashMinFrequencyTrainColumn: 0
+  frequencyOffsetTrainRow: 0
+  frequencyOffsetTrainColumn: 0
   flashDurationTrainRow: 0.1
   flashIntervalTrainRow: 0.1
   flashDurationTrainColumn: 0.3
   flashIntervalTrainColumn: 0.3
   repeatTimesTest: 5
+  flashMinFrequencyTestRow: 0
+  flashMinFrequencyTestColumn: 0
+  frequencyOffsetTestRow: 0
+  frequencyOffsetTestColumn: 0
   flashDurationTestRow: 0.1
   flashIntervalTestRow: 0.1
   flashDurationTestColumn: 0.2
@@ -10035,13 +10043,21 @@ MonoBehaviour:
   gameState: 1
   trainLetters: 010000000200000008000000
   repeatTimesTrain: 5
-  flashDurationTrainRow: 0.1
-  flashIntervalTrainRow: 0.1
-  flashDurationTrainColumn: 3
-  flashIntervalTrainColumn: 3
+  flashMinFrequencyTrainRow: 6
+  frequencyOffsetTrainRow: 0
+  flashDurationTrainRow: 0.5
+  flashIntervalTrainRow: 0.5
+  flashMinFrequencyTrainColumn: 6
+  frequencyOffsetTrainColumn: 0
+  flashDurationTrainColumn: 0.5
+  flashIntervalTrainColumn: 0.5
   repeatTimesTest: 5
+  flashMinFrequencyTestRow: 0
+  frequencyOffsetTestRow: 0
   flashDurationTestRow: 0
   flashIntervalTestRow: 0
+  flashMinFrequencyTestColumn: 0
+  frequencyOffsetTestColumn: 0
   flashDurationTestColumn: 0
   flashIntervalTestColumn: 0
   StartTrainButton: {fileID: 1409825887}
