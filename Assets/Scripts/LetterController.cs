@@ -6,10 +6,19 @@ using UnityEngine.UI;
 public class LetterController : MonoBehaviour
 {
     // Start is called before the first frame update
+     public void SetLetterRowFlashColor()
+    {
+        letterImage.color = Color.yellow; // Set to red for row flashing
+    }
+
+    public void SetLetterColumnFlashColor()
+    {
+        letterImage.color = Color.green; // Set to green for column flashing
+    }
     public Presets.Letters letter;
-    
+
     public Image letterImage;
-    
+
     void Start()
     {
         // get Image component from the game object
@@ -19,7 +28,7 @@ public class LetterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 

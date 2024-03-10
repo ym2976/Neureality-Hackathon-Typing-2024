@@ -9375,6 +9375,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192a8db4f027b964884819e28a52aaf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainLetters: 
+  repeatTimesTrain: 5
+  flashDurationTrainRow: 0.1
+  flashIntervalTrainRow: 0.1
+  flashDurationTrainColumn: 0.3
+  flashIntervalTrainColumn: 0.3
+  repeatTimesTest: 5
+  flashDurationTestRow: 0.1
+  flashIntervalTestRow: 0.1
+  flashDurationTestColumn: 0.2
+  flashIntervalTestColumn: 0.2
   A: {fileID: 1788951779}
   B: {fileID: 1224716608}
   C: {fileID: 1336202885}
@@ -9411,13 +9422,6 @@ MonoBehaviour:
   Seven: {fileID: 2101209455}
   Eight: {fileID: 584818294}
   Nine: {fileID: 1470918175}
-  trainLetters: 
-  repeatTimesTrain: 0
-  flashDurationTrain: 0
-  flashIntervelTrain: 0
-  repeatTimesTest: 0
-  flashDurationTest: 0
-  flashIntervelTest: 0
   ContinueButton: {fileID: 759406188}
   gameManager: {fileID: 961943825}
 --- !u!1 &877653825
@@ -10098,11 +10102,15 @@ MonoBehaviour:
   gameState: 1
   trainLetters: 010000000200000008000000
   repeatTimesTrain: 5
-  flashDurationTrain: 0.1
-  flashIntervelTrain: 0.1
+  flashDurationTrainRow: 0.1
+  flashIntervalTrainRow: 0.1
+  flashDurationTrainColumn: 3
+  flashIntervalTrainColumn: 3
   repeatTimesTest: 5
-  flashDurationTest: 0.1
-  flashIntervelTest: 0.1
+  flashDurationTestRow: 0
+  flashIntervalTestRow: 0
+  flashDurationTestColumn: 0
+  flashIntervalTestColumn: 0
   StartTrainButton: {fileID: 1409825887}
   StartTestButton: {fileID: 821763127}
   IntroductionTextPanel: {fileID: 990701136}

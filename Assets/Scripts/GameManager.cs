@@ -13,14 +13,17 @@ public class GameManager : MonoBehaviour
     [Header("Train Configuration")]
     public List<Presets.Letters> trainLetters;
     public int repeatTimesTrain;
-    public float flashDurationTrain;
-    public float flashIntervelTrain;
+    public float flashDurationTrainRow;
+    public float flashIntervalTrainRow;
+    public float flashDurationTrainColumn;
+    public float flashIntervalTrainColumn;
 
     [Header("Test Configuration")]
     public int repeatTimesTest;
-    public float flashDurationTest;
-    public float flashIntervelTest;
-
+    public float flashDurationTestRow;
+    public float flashIntervalTestRow;
+    public float flashDurationTestColumn;
+    public float flashIntervalTestColumn;
 
     [Header("Welcome State GUI")]
     public Button StartTrainButton;
@@ -71,15 +74,16 @@ public class GameManager : MonoBehaviour
     public void TrainButtonClicked()
     {
         SetTrainState();
-        boardController.SetBoardTrainConfig(trainLetters, repeatTimesTrain, flashDurationTrain, flashIntervelTrain);
-        
+        boardController.SetBoardTrainConfig(trainLetters, repeatTimesTrain, flashDurationTrainRow, flashDurationTrainColumn, flashIntervalTrainRow,flashIntervalTrainColumn);
+
     }
 
 
     public void TestButtonClicked()
     {
         SetTestState();
-        boardController.SetBoardTestConfig(repeatTimesTest, flashDurationTest, flashIntervelTest);
+        boardController.SetBoardTestConfig(repeatTimesTest, flashDurationTestRow, flashDurationTestColumn, flashIntervalTestRow,flashIntervalTestColumn);
+
 
     }
 

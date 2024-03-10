@@ -5,8 +5,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Presets;
 
+
 public class BoardController : MonoBehaviour
-{
+{   [Header("Train Configuration")]
+    public List<Presets.Letters> trainLetters;
+    public int repeatTimesTrain;
+    public float flashDurationTrainRow;
+    public float flashIntervalTrainRow;
+    public float flashDurationTrainColumn;
+    public float flashIntervalTrainColumn;
+
+    [Header("Test Configuration ")]
+    public int repeatTimesTest;
+    public float flashDurationTestRow;
+    public float flashIntervalTestRow;
+    public float flashDurationTestColumn;
+    public float flashIntervalTestColumn;
+
+
     // Start is called before the first frame update
     [Header("Letter Controller")]
     public LetterController A;
@@ -50,17 +66,6 @@ public class BoardController : MonoBehaviour
     public LetterController[,] boardControllers = new LetterController[6, 6];
 
 
-    [Header("Train Configuration")]
-    public List<Presets.Letters> trainLetters;
-    public int repeatTimesTrain;
-    public float flashDurationTrain;
-    public float flashIntervelTrain;
-
-    [Header("Test Configuration")]
-    public int repeatTimesTest;
-    public float flashDurationTest;
-    public float flashIntervelTest;
-
     [Header("Board Buttons")]
     public Button ContinueButton;
 
@@ -68,7 +73,7 @@ public class BoardController : MonoBehaviour
     public GameManager gameManager;
 
     // a list of list
-    List<List<int>> flashingSequence  = new List<List<int>>() { 
+    List<List<int>> flashingSequence  = new List<List<int>>() {
         // first element indicate the row and column, the second element indicate the index
         new List<int> { 1, 0 },
         new List<int> { 1, 1 },
@@ -85,7 +90,7 @@ public class BoardController : MonoBehaviour
         new List<int> { 2, 5 },
 
     };
-    
+
     // create the Presets.Letters AND LetterController dictionary
     public Dictionary<Presets.Letters, LetterController> letterControllerDict = new Dictionary<Presets.Letters, LetterController>();
 
@@ -93,6 +98,8 @@ public class BoardController : MonoBehaviour
     [Header("Train Test IEnumerator")]
     public IEnumerator trainCoroutine;
     public IEnumerator testCoroutine;
+
+
 
 
 
@@ -106,35 +113,35 @@ public class BoardController : MonoBehaviour
         boardControllers[0,3] = D;
         boardControllers[0,4] = E;
         boardControllers[0,5] = F;
-        
+
         boardControllers[1,0] = G;
         boardControllers[1,1] = H;
         boardControllers[1,2] = I;
         boardControllers[1,3] = J;
         boardControllers[1,4] = K;
         boardControllers[1,5] = L;
-        
+
         boardControllers[2,0] = M;
         boardControllers[2,1] = N;
         boardControllers[2,2] = O;
         boardControllers[2,3] = P;
         boardControllers[2,4] = Q;
         boardControllers[2,5] = R;
-        
+
         boardControllers[3,0] = S;
         boardControllers[3,1] = T;
         boardControllers[3,2] = U;
         boardControllers[3,3] = V;
         boardControllers[3,4] = W;
         boardControllers[3,5] = X;
-        
+
         boardControllers[4,0] = Y;
         boardControllers[4,1] = Z;
         boardControllers[4,2] = Zero;
         boardControllers[4,3] = One;
         boardControllers[4,4] = Two;
         boardControllers[4,5] = Three;
-        
+
         boardControllers[5,0] = Four;
         boardControllers[5,1] = Five;
         boardControllers[5,2] = Six;
@@ -150,26 +157,30 @@ public class BoardController : MonoBehaviour
                 letterControllerDict.Add(letterController.letter, letterController);
             }
         }
-               
+
     }
 
 
-    public void SetBoardTrainConfig(List<Presets.Letters> trainLetters, int repeatTimesTrain, float flashDurationTrain, float flashIntervelTrain)
+    public void SetBoardTrainConfig(List<Presets.Letters> trainLetters, int repeatTimesTrain, float flashDurationTrainRow, float flashDurationTrainColumn, float flashIntervalTrainRow,float flashIntervalTrainColumn)
     {
         // copy the trainLetters
 
         this.trainLetters = new List<Presets.Letters>(trainLetters);
         this.repeatTimesTrain = repeatTimesTrain;
-        this.flashDurationTrain = flashDurationTrain;
-        this.flashIntervelTrain = flashIntervelTrain;
+        this.flashDurationTrainRow=flashDurationTrainRow;
+        this.flashIntervalTrainRow= flashIntervalTrainRow;
+        this.flashDurationTrainColumn=flashDurationTrainColumn;
+        this.flashIntervalTrainColumn=flashIntervalTrainColumn;
 
     }
 
-    public void SetBoardTestConfig(int repeatTimesTest, float flashDurationTest, float flashIntervelTest)
+    public void SetBoardTestConfig(int repeatTimesTest,float flashDurationTestRow, float flashDurationTestColumn, float flashIntervalTestRow,float flashIntervalTestColumn)
     {
         this.repeatTimesTest = repeatTimesTest;
-        this.flashDurationTest = flashDurationTest;
-        this.flashIntervelTest = flashIntervelTest;
+        this.flashDurationTestRow=flashDurationTestRow;
+        this.flashIntervalTestRow= flashIntervalTestRow;
+        this.flashDurationTestColumn=flashDurationTestColumn;
+        this.flashIntervalTestColumn=flashIntervalTestColumn;
     }
 
 
@@ -188,7 +199,7 @@ public class BoardController : MonoBehaviour
     /// </summary>
     public void ContinueButtonClicked()
     {
-        
+
 
         if (gameManager.gameState == Presets.GameState.TrainState)
         {
@@ -231,229 +242,191 @@ public class BoardController : MonoBehaviour
     /// <param name="targetLetter"></param>
     /// <returns></returns>
     public IEnumerator TrainIEnumerator(Presets.Letters targetLetter)
+{
+    // send the train trail start marker
+    gameManager.eventMarkerLSLOutletController.SendFlashingTrailStartMarker((float)Presets.TrailMarker.TrainMarker);
+
+    SetAllLettersOffColor();
+
+    LetterController targetLetterController = letterControllerDict[targetLetter];
+
+    Debug.Log("TrainIEnumerator Start");
+    yield return new WaitForSeconds(Presets.BoardEnableWaitTime);
+    Debug.Log("Flash Start");
+
+    int repeatTimes = repeatTimesTrain;
+
+    // turn on the target letter hint
+    targetLetterController.SetLetterTrainHintHighlightColor();
+    yield return new WaitForSeconds(Presets.LetterTrainHintHighlightDuration);
+    targetLetterController.SetLetterOffColor();
+
+    SetAllLettersOffColor();
+
+    yield return new WaitForSeconds(Presets.WaitDurationBeforeStartFlashing);
+
+    for (int i = 0; i < repeatTimes; i++)
     {
-        
-        // send the train trail start marker
-        gameManager.eventMarkerLSLOutletController.SendFlashingTrailStartMarker((float)Presets.TrailMarker.TrainMarker);
+        List<List<int>> flashingSequenceCopy = new List<List<int>>(flashingSequence);
+        Utils.Shuffle(flashingSequenceCopy);
 
-        SetAllLettersOffColor();
-
-        LetterController targetLetterController = letterControllerDict[targetLetter];
-
-        Debug.Log("TrainIEnumerator Start");
-        yield return new WaitForSeconds(Presets.BoardEnableWaitTime);
-        Debug.Log("Flash Start");
-
-        
-
-        int repeatTimes = repeatTimesTrain;
-
-        // turn on the target letter hint
-        targetLetterController.SetLetterTrainHintHighlightColor();
-        yield  return new WaitForSeconds(Presets.LetterTrainHintHighlightDuration);
-        targetLetterController.SetLetterOffColor();
-
-        SetAllLettersOffColor();
-
-        yield return new WaitForSeconds(Presets.WaitDurationBeforeStartFlashing);
-
-        for(int i = 0; i < repeatTimes; i++)
+        foreach (List<int> index in flashingSequenceCopy)
         {
+            int rowOrColumnIndicator = index[0];
+            int indexIndicator = index[1];
+            bool targetFlashing = false;
 
-            // copy   flashingSequence
-            List<List<int>> flashingSequenceCopy = new List<List<int>>(flashingSequence);
+            // Choose the appropriate flash duration and interval based on row/column
+            float currentFlashDuration = rowOrColumnIndicator == 1 ? flashDurationTrainRow : flashDurationTrainColumn;
+            float currentFlashInterval = rowOrColumnIndicator == 1 ? flashIntervalTrainRow : flashIntervalTrainColumn;
 
-            Utils.Shuffle(flashingSequenceCopy);
-
-            foreach (List<int> index in flashingSequenceCopy)
+            if (rowOrColumnIndicator == 1)
             {
-
-                int raw_col_indicator = index[0];
-                int index_indicator = index[1];
-                bool target_flashing = false;
-
-                if(raw_col_indicator ==1)
+                // Flashing a row
+                for (int j = 0; j < 6; j++)
                 {
-                    // turn on the index_indicator row
-                    for (int j = 0; j < 6; j++)
-                    {
-                        LetterController letterController = boardControllers[index_indicator, j];
-                        letterController.SetLetterOnColor();
-
-                        // if the target letter is on, set the target_flashing to true
-                        if(targetLetterController == letterController)
-                        {
-                            target_flashing = true;
-                        }
-                    }
+                    LetterController letterController = boardControllers[indexIndicator, j];
+                    //letterController.SetLetterOnColor();
+                    letterController.SetLetterRowFlashColor();
+                    if (letterController == targetLetterController) targetFlashing = true;
                 }
-                else if(raw_col_indicator == 2)
+            }
+            else if (rowOrColumnIndicator == 2)
+            {
+                // Flashing a column
+                for (int j = 0; j < 6; j++)
                 {
-                    // turn on the target column
-                    for (int j = 0; j < 6; j++)
-                    {
-                        LetterController letterController = boardControllers[j, index_indicator];
-                        letterController.SetLetterOnColor();
-
-                        // if the target letter is on, set the target_flashing to true
-                        if (targetLetterController == letterController)
-                        {
-                            target_flashing = true;
-                        }
-                    }
+                    LetterController letterController = boardControllers[j, indexIndicator];
+                    //letterController.SetLetterOnColor();
+                    letterController.SetLetterColumnFlashColor();
+                    if (letterController == targetLetterController) targetFlashing = true;
                 }
-
-                // the target is on
-                // send the flashing marker
-                // raw_col_indicator: 1 for row, 2 for column
-                // index_indicator: the index of the row or column
-                // target_flashing: 1 for target flashing, 0 for non-target flashing
-                gameManager.eventMarkerLSLOutletController.SendFlashingMarker((float)raw_col_indicator, (float)index_indicator, target_flashing ? 1.0f : 0.0f);
-
-
-                yield return new WaitForSeconds(flashDurationTrain);
-                SetAllLettersOffColor();
-                yield return new WaitForSeconds(flashIntervelTrain);
-
-
             }
 
+            // Send the flashing marker with additional information on whether the target was flashing
+            gameManager.eventMarkerLSLOutletController.SendFlashingMarker((float)rowOrColumnIndicator, (float)indexIndicator, targetFlashing ? 1.0f : 0.0f);
+
+            yield return new WaitForSeconds(currentFlashDuration);
+            SetAllLettersOffColor();
+            yield return new WaitForSeconds(currentFlashInterval);
         }
-
-        yield return new WaitForSeconds(1.0f); 
-        // send the train trail end marker
-        gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TrainMarker);
-
-
-        yield return new WaitForSeconds(Presets.FlashEndRestDuration);
-        ResetBoardGUI();
-
-
-        // TODO: RPC call to the PhysioLabXR Scripting Interface to trigger some Training Event if needed.
-
-
-
     }
+
+    yield return new WaitForSeconds(1.0f);
+    // send the train trail end marker
+    gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TrainMarker);
+
+    yield return new WaitForSeconds(Presets.FlashEndRestDuration);
+    ResetBoardGUI();
+}
 
     /// <summary>
     /// This IEnumerator will flash the board based on the test configuration set in the game manager
     /// </summary>
     /// <returns></returns>
 
-    public IEnumerator TestIEnumerator()
+
+public IEnumerator TestIEnumerator()
+{
+    // send the test trail start marker
+    gameManager.eventMarkerLSLOutletController.SendFlashingTrailStartMarker((float)Presets.TrailMarker.TestMarker);
+
+    SetAllLettersOffColor();
+
+    Debug.Log("TestIEnumerator Start");
+    yield return new WaitForSeconds(Presets.BoardEnableWaitTime);
+    Debug.Log("Flash Start");
+
+    int repeatTimes = repeatTimesTest;
+
+    // Initial board flash for the test phase, if needed
+    SetAllLettersOnColor();
+    yield return new WaitForSeconds(Presets.LetterTrainHintHighlightDuration);
+    SetAllLettersOffColor();
+
+    yield return new WaitForSeconds(Presets.WaitDurationBeforeStartFlashing);
+
+    for (int i = 0; i < repeatTimes; i++)
     {
+        List<List<int>> flashingSequenceCopy = new List<List<int>>(flashingSequence);
+        Utils.Shuffle(flashingSequenceCopy);
 
-        // send the test trail start marker
-        gameManager.eventMarkerLSLOutletController.SendFlashingTrailStartMarker((float)Presets.TrailMarker.TestMarker);
-
-
-
-        SetAllLettersOffColor();
-
-
-
-        Debug.Log("TrainIEnumerator Start");
-        yield return new WaitForSeconds(Presets.BoardEnableWaitTime);
-        Debug.Log("Flash Start");
-
-
-
-        int repeatTimes = repeatTimesTest;
-
-        // turn on the target letter hint
-        SetAllLettersOnColor();
-        yield return new WaitForSeconds(Presets.LetterTrainHintHighlightDuration); // turn all the board on for a while before the flashing starts
-        SetAllLettersOffColor();
-
-        yield return new WaitForSeconds(Presets.WaitDurationBeforeStartFlashing);
-
-        for (int i = 0; i < repeatTimes; i++)
+        foreach (List<int> index in flashingSequenceCopy)
         {
+            int rowOrColumnIndicator = index[0];
+            int indexIndicator = index[1];
 
-            // copy   flashingSequence
-            List<List<int>> flashingSequenceCopy = new List<List<int>>(flashingSequence);
+            // Choose the appropriate flash duration and interval based on row/column
+            float currentFlashDuration = rowOrColumnIndicator == 1 ? flashDurationTestRow : flashDurationTestColumn;
+            float currentFlashInterval = rowOrColumnIndicator == 1 ? flashIntervalTestRow : flashIntervalTestColumn;
 
-            Utils.Shuffle(flashingSequenceCopy);
-
-            foreach (List<int> index in flashingSequenceCopy)
+            if (rowOrColumnIndicator == 1)
             {
-
-                int raw_col_indicator = index[0];
-                int index_indicator = index[1];
-
-                if (raw_col_indicator == 1)
+                // Flashing a row
+                for (int j = 0; j < 6; j++)
                 {
-                    // turn on the index_indicator row
-                    for (int j = 0; j < 6; j++)
-                    {
-                        LetterController letterController = boardControllers[index_indicator, j];
-                        letterController.SetLetterOnColor();
-                    }
-
+                    LetterController letterController=boardControllers[indexIndicator, j];
+                    letterController.SetLetterRowFlashColor();
                 }
-                else if (raw_col_indicator == 2)
+            }
+            else if (rowOrColumnIndicator == 2)
+            {
+                // Flashing a column
+                for (int j = 0; j < 6; j++)
                 {
-                    // turn on the target column
-                    for (int j = 0; j < 6; j++)
-                    {
-                        LetterController letterController = boardControllers[j, index_indicator];
-                        letterController.SetLetterOnColor();
-                    }
+                    LetterController letterController=boardControllers[j, indexIndicator];
+                    letterController.SetLetterColumnFlashColor();
                 }
-
-                // send the flashing marker
-                // raw_col_indicator: 1 for row, 2 for column
-                // index_indicator: the index of the row or column
-                // target_flashing: always 0 for test
-                gameManager.eventMarkerLSLOutletController.SendFlashingMarker((float)raw_col_indicator, (float)index_indicator, 0.0f);
-
-                yield return new WaitForSeconds(flashDurationTest);
-                SetAllLettersOffColor();
-                yield return new WaitForSeconds(flashIntervelTest);
-
             }
 
+            // Send the flashing marker without target information (for test phase)
+            gameManager.eventMarkerLSLOutletController.SendFlashingMarker((float)rowOrColumnIndicator, (float)indexIndicator, 0.0f);
+
+            yield return new WaitForSeconds(currentFlashDuration);
+            SetAllLettersOffColor();
+            yield return new WaitForSeconds(currentFlashInterval);
         }
-
-
-        yield return new WaitForSeconds(1.0f);
-        // send the test trail end marker
-        gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TestMarker);
-
-        yield return new WaitForSeconds(Presets.FlashEndRestDuration);
-
-
-        // this will trigger the predict() in PhysioLabXR Scripting Interface
-        gameManager.eventMarkerLSLOutletController.SendTestMarker();
-        gameManager.predictionLSLInletController.clearBuffer();
-
-        bool predictionReceived = false;
-
-        while (!predictionReceived)
-        {
-            gameManager.predictionLSLInletController.pullPredictionSample();
-            if (gameManager.predictionLSLInletController.frameTimestamp != 0)
-            {
-                predictionReceived = true;
-            }
-            yield return new WaitForSeconds(0.2f); // wait for 0.2 second for pulling
-        }
-
-
-        // get the letter controller with predicted letter index in the board 
-        LetterController predictedLetterController = boardControllers[
-            (int)gameManager.predictionLSLInletController.frameDataBuffer[0],
-            (int)gameManager.predictionLSLInletController.frameDataBuffer[1]
-            ];
-
-        // turn on the predicted char for a second
-        predictedLetterController.SetLetterTrainHintHighlightColor();
-        yield return new WaitForSeconds(2.0f);
-        SetAllLettersOffColor();
-        yield return new WaitForSeconds(1.0f);
-
-        ResetBoardGUI();
     }
+
+    yield return new WaitForSeconds(1.0f);
+    // send the test trail end marker
+    gameManager.eventMarkerLSLOutletController.SendFlashingTrailEndMarker((float)Presets.TrailMarker.TestMarker);
+
+    // Additional logic for handling the end of the test phase, such as displaying results, could be placed here.
+
+    yield return new WaitForSeconds(Presets.FlashEndRestDuration);
+
+    // this will trigger the predict() in PhysioLabXR Scripting Interface
+    gameManager.eventMarkerLSLOutletController.SendTestMarker();
+    gameManager.predictionLSLInletController.clearBuffer();
+
+    bool predictionReceived = false;
+
+    while (!predictionReceived)
+    {
+        gameManager.predictionLSLInletController.pullPredictionSample();
+        if (gameManager.predictionLSLInletController.frameTimestamp != 0)
+        {
+            predictionReceived = true;
+        }
+        yield return new WaitForSeconds(0.2f); // wait for 0.2 second for pulling
+    }
+
+
+    // get the letter controller with predicted letter index in the board
+    LetterController predictedLetterController = boardControllers[
+        (int)gameManager.predictionLSLInletController.frameDataBuffer[0],
+        (int)gameManager.predictionLSLInletController.frameDataBuffer[1]
+        ];
+
+    // turn on the predicted char for a second
+    predictedLetterController.SetLetterTrainHintHighlightColor();
+    yield return new WaitForSeconds(2.0f);
+    SetAllLettersOffColor();
+    yield return new WaitForSeconds(1.0f);
+
+    ResetBoardGUI();
+}
 
 
     public void ResetBoardGUI()
