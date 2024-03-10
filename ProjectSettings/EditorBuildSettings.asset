@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/P300Speller.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/P300SpellerTesting.unity
+    guid: b33e868b0e10ec64ca35417b8f487183
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: e50b4cebf33426b43b58e51b7aa05d60, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 87f4192ef1abd0f4e9da296ee519a838, type: 2}
