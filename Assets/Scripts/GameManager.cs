@@ -13,15 +13,23 @@ public class GameManager : MonoBehaviour
     [Header("Train Configuration")]
     public List<Presets.Letters> trainLetters;
     public int repeatTimesTrain;
+    public float flickerFrequencyMinTrainRow;
+    public float flickerFrequencyOffsetTrainRow;
     public float flashDurationTrainRow;
     public float flashIntervalTrainRow;
+    public float flickerFrequencyMinTrainColumn;
+    public float flickerFrequencyOffsetTrainColumn;
     public float flashDurationTrainColumn;
     public float flashIntervalTrainColumn;
 
     [Header("Test Configuration")]
     public int repeatTimesTest;
+    public float flickerFrequencyMinTestRow;
+    public float flickerFrequencyOffsetTestRow;
     public float flashDurationTestRow;
     public float flashIntervalTestRow;
+    public float flickerFrequencyMinTestColumn;
+    public float flickerFrequencyOffsetTestColumn;
     public float flashDurationTestColumn;
     public float flashIntervalTestColumn;
 
@@ -74,7 +82,7 @@ public class GameManager : MonoBehaviour
     public void TrainButtonClicked()
     {
         SetTrainState();
-        boardController.SetBoardTrainConfig(trainLetters, repeatTimesTrain, flashDurationTrainRow, flashDurationTrainColumn, flashIntervalTrainRow,flashIntervalTrainColumn);
+        boardController.SetBoardTrainConfig(trainLetters, repeatTimesTrain, flickerFrequencyMinTrainRow, flickerFrequencyMinTrainColumn, flickerFrequencyOffsetTrainRow, flickerFrequencyOffsetTrainColumn, flashDurationTrainRow, flashDurationTrainColumn, flashIntervalTrainRow,flashIntervalTrainColumn);
 
     }
 
@@ -82,7 +90,7 @@ public class GameManager : MonoBehaviour
     public void TestButtonClicked()
     {
         SetTestState();
-        boardController.SetBoardTestConfig(repeatTimesTest, flashDurationTestRow, flashDurationTestColumn, flashIntervalTestRow,flashIntervalTestColumn);
+        boardController.SetBoardTestConfig(repeatTimesTest, flickerFrequencyMinTestRow, flickerFrequencyMinTestColumn, flickerFrequencyOffsetTestRow, flickerFrequencyOffsetTestColumn, flashDurationTestRow, flashDurationTestColumn, flashIntervalTestRow,flashIntervalTestColumn);
 
 
     }
