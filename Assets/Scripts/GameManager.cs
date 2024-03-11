@@ -18,10 +18,12 @@ public class GameManager : MonoBehaviour
     public float flickerFrequencyOffsetTrainRow;
     public float flashDurationTrainRow;
     public float flashIntervalTrainRow;
+    public Color flashColorTrainRow;
     public float flickerFrequencyMinTrainColumn;
     public float flickerFrequencyOffsetTrainColumn;
     public float flashDurationTrainColumn;
     public float flashIntervalTrainColumn;
+    public Color flashColorTrainColumn;
 
     [Header("Test Configuration")]
     public int repeatTimesTest;
@@ -29,10 +31,12 @@ public class GameManager : MonoBehaviour
     public float flickerFrequencyOffsetTestRow;
     public float flashDurationTestRow;
     public float flashIntervalTestRow;
+    public Color flashColorTestRow;
     public float flickerFrequencyMinTestColumn;
     public float flickerFrequencyOffsetTestColumn;
     public float flashDurationTestColumn;
     public float flashIntervalTestColumn;
+    public Color flashColorTestColumn;
 
     [Header("Welcome State GUI")]
     public Button StartTrainButton;
@@ -102,7 +106,19 @@ public class GameManager : MonoBehaviour
     public void TrainButtonClicked()
     {
         SetTrainState();
-        boardController.SetBoardTrainConfig(trainLetters, repeatTimesTrain, flickerFrequencyMinTrainRow, flickerFrequencyMinTrainColumn, flickerFrequencyOffsetTrainRow, flickerFrequencyOffsetTrainColumn, flashDurationTrainRow, flashDurationTrainColumn, flashIntervalTrainRow,flashIntervalTrainColumn);
+        boardController.SetBoardTrainConfig(
+            trainLetters,
+            repeatTimesTrain,
+            flickerFrequencyMinTrainRow,
+            flickerFrequencyMinTrainColumn,
+            flickerFrequencyOffsetTrainRow,
+            flickerFrequencyOffsetTrainColumn,
+            flashDurationTrainRow,
+            flashDurationTrainColumn,
+            flashIntervalTrainRow,
+            flashIntervalTrainColumn,
+            flashColorTrainRow,
+            flashColorTrainColumn);
 
     }
 
@@ -110,7 +126,18 @@ public class GameManager : MonoBehaviour
     public void TestButtonClicked()
     {
         SetTestState();
-        boardController.SetBoardTestConfig(repeatTimesTest, flickerFrequencyMinTestRow, flickerFrequencyMinTestColumn, flickerFrequencyOffsetTestRow, flickerFrequencyOffsetTestColumn, flashDurationTestRow, flashDurationTestColumn, flashIntervalTestRow,flashIntervalTestColumn);
+        boardController.SetBoardTestConfig(
+            repeatTimesTest,
+            flickerFrequencyMinTestRow,
+            flickerFrequencyMinTestColumn,
+            flickerFrequencyOffsetTestRow,
+            flickerFrequencyOffsetTestColumn,
+            flashDurationTestRow,
+            flashDurationTestColumn,
+            flashIntervalTestRow,
+            flashIntervalTestColumn,
+            flashColorTrainRow,
+            flashColorTrainColumn);
 
 
     }

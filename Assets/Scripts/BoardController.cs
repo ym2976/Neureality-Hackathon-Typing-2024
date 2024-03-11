@@ -15,10 +15,12 @@ public class BoardController : MonoBehaviour
     public float flickerFrequencyOffsetTrainRow;
     public float flashDurationTrainRow;
     public float flashIntervalTrainRow;
+    public Color flashColorTrainRow;
     public float flickerFrequencyMinTrainColumn;
     public float flickerFrequencyOffsetTrainColumn;
     public float flashDurationTrainColumn;
     public float flashIntervalTrainColumn;
+    public Color flashColorTrainColumn;
 
 
     [Header("Test Configuration ")]
@@ -27,10 +29,12 @@ public class BoardController : MonoBehaviour
     public float flickerFrequencyOffsetTestRow;
     public float flashDurationTestRow;
     public float flashIntervalTestRow;
+    public Color flashColorTestRow;
     public float flickerFrequencyMinTestColumn;
     public float flickerFrequencyOffsetTestColumn;
     public float flashDurationTestColumn;
     public float flashIntervalTestColumn;
+    public Color flashColorTestColumn;
 
 
     // Start is called before the first frame update
@@ -182,7 +186,9 @@ public class BoardController : MonoBehaviour
         float flashDurationTrainRow,
         float flashDurationTrainColumn,
         float flashIntervalTrainRow,
-        float flashIntervalTrainColumn)
+        float flashIntervalTrainColumn,
+        Color flashColorTrainRow,
+        Color flashColorTrainColumn)
     {
         // copy the trainLetters
 
@@ -194,8 +200,10 @@ public class BoardController : MonoBehaviour
         this.flickerFrequencyOffsetTrainRow = flickerFrequencyOffsetTrainRow;
         this.flashDurationTrainRow = flashDurationTrainRow;
         this.flashIntervalTrainRow = flashIntervalTrainRow;
+        this.flashColorTrainRow = flashColorTrainRow;
         this.flashDurationTrainColumn = flashDurationTrainColumn;
         this.flashIntervalTrainColumn = flashIntervalTrainColumn;
+        this.flashColorTrainColumn = flashColorTrainColumn;
 
     }
 
@@ -208,7 +216,9 @@ public class BoardController : MonoBehaviour
         float flashDurationTestRow,
         float flashDurationTestColumn,
         float flashIntervalTestRow,
-        float flashIntervalTestColumn)
+        float flashIntervalTestColumn,
+        Color flashColorTestRow,
+        Color flashColorTestColumn)
     {
         this.repeatTimesTest = repeatTimesTest;
         this.flickerFrequencyMinTestColumn = flickerFrequencyMinTestColumn;
@@ -217,8 +227,10 @@ public class BoardController : MonoBehaviour
         this.flickerFrequencyOffsetTestRow = flickerFrequencyOffsetTestRow;
         this.flashDurationTestRow = flashDurationTestRow;
         this.flashIntervalTestRow = flashIntervalTestRow;
+        this.flashColorTestRow = flashColorTestRow;
         this.flashDurationTestColumn = flashDurationTestColumn;
         this.flashIntervalTestColumn = flashIntervalTestColumn;
+        this.flashColorTestColumn = flashColorTestColumn;
     }
 
 
@@ -319,9 +331,10 @@ public class BoardController : MonoBehaviour
                 float currentFlickerOffset = rowOrColumnIndicator == 1 ? flickerFrequencyOffsetTrainRow : flickerFrequencyOffsetTrainColumn;
                 float minFlashFrequency = rowOrColumnIndicator == 1 ? flickerFrequencyMinTrainRow : flickerFrequencyMinTrainColumn;
                 float currentFlashFrequency = minFlashFrequency + currentFlickerOffset * indexIndicator;
+                Color currentFlashColor = rowOrColumnIndicator == 1 ? flashColorTrainRow : flashColorTrainColumn;
 
                 StartCoroutine(
-                            flicker(rowOrColumnIndicator, indexIndicator, currentFlashFrequency, currentFlashDuration, targetLetter));
+                            flicker(rowOrColumnIndicator, indexIndicator, currentFlashFrequency, currentFlashDuration, currentFlashColor, targetLetter));
 
                 yield return new WaitForSeconds(currentFlashDuration);
                 SetAllLettersOffColor();
@@ -379,9 +392,10 @@ public IEnumerator TestIEnumerator()
                 float currentFlickerOffset = rowOrColumnIndicator == 1 ? flickerFrequencyOffsetTestRow : flickerFrequencyOffsetTestColumn;
                 float minFlashFrequency = rowOrColumnIndicator == 1 ? flickerFrequencyMinTestRow : flickerFrequencyMinTestColumn;
                 float currentFlashFrequency = minFlashFrequency + currentFlickerOffset * indexIndicator;
+                Color currentFlashColor = rowOrColumnIndicator == 1 ? flashColorTestRow : flashColorTestColumn;
 
                 StartCoroutine(
-                            flicker(rowOrColumnIndicator, indexIndicator, currentFlashFrequency, currentFlashDuration));
+                            flicker(rowOrColumnIndicator, indexIndicator, currentFlashFrequency, currentFlashDuration, currentFlashColor));
 
                 yield return new WaitForSeconds(currentFlashDuration);
                 SetAllLettersOffColor();
@@ -429,7 +443,7 @@ public IEnumerator TestIEnumerator()
     ResetBoardGUI();
 }
 
-    public IEnumerator flicker(int rowOrColumnIndicator, int indexIndicator, float frequency, float duration)
+    public IEnumerator flicker(int rowOrColumnIndicator, int indexIndicator, float frequency, float duration, Color color)
     {
         Debug.Log((rowOrColumnIndicator == 1 ? "row" : "column") + $" index={indexIndicator}, frequency={frequency}");
         float flickerDuration = (1 / frequency) * 0.6f;
@@ -444,7 +458,7 @@ public IEnumerator TestIEnumerator()
                 for (int j = 0; j < 6; j++)
                 {
                     LetterController letterController = boardControllers[indexIndicator, j];
-                    letterController.SetLetterRowFlashColor();
+                    letterController.SetLetterOnColor(color);
                 }
             }
             else if (rowOrColumnIndicator == 2)
@@ -453,7 +467,7 @@ public IEnumerator TestIEnumerator()
                 for (int j = 0; j < 6; j++)
                 {
                     LetterController letterController = boardControllers[j, indexIndicator];
-                    letterController.SetLetterColumnFlashColor();
+                    letterController.SetLetterOnColor(color);
                 }
             }
 
@@ -466,7 +480,7 @@ public IEnumerator TestIEnumerator()
         }
     }
 
-    public IEnumerator flicker(int rowOrColumnIndicator, int indexIndicator, float frequency, float duration, Presets.Letters targetLetter)
+    public IEnumerator flicker(int rowOrColumnIndicator, int indexIndicator, float frequency, float duration, Color color, Presets.Letters targetLetter)
     {
         LetterController targetLetterController = letterControllerDict[targetLetter];
         bool targetFlashing = false;
@@ -484,7 +498,7 @@ public IEnumerator TestIEnumerator()
                 for (int j = 0; j < 6; j++)
                 {
                     LetterController letterController = boardControllers[indexIndicator, j];
-                    letterController.SetLetterRowFlashColor();
+                    letterController.SetLetterOnColor(color);
                     if (letterController == targetLetterController) targetFlashing = true;
                 }
             }
@@ -494,7 +508,7 @@ public IEnumerator TestIEnumerator()
                 for (int j = 0; j < 6; j++)
                 {
                     LetterController letterController = boardControllers[j, indexIndicator];
-                    letterController.SetLetterColumnFlashColor();
+                    letterController.SetLetterOnColor(color);
                     if (letterController == targetLetterController) targetFlashing = true;
                 }
             }
@@ -544,7 +558,7 @@ public IEnumerator TestIEnumerator()
             for (int j = 0; j < 6; j++)
             {
                 LetterController letterController = boardControllers[i, j];
-                letterController.SetLetterOnColor();
+                letterController.SetLetterOnColor(Presets.LetterOnColor);
             }
         }
     }

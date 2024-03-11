@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9375,6 +9375,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 192a8db4f027b964884819e28a52aaf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainLetters: 
+  repeatTimesTrain: 0
+  flickerFrequencyMinTrainRow: 0
+  flickerFrequencyOffsetTrainRow: 0
+  flashDurationTrainRow: 0
+  flashIntervalTrainRow: 0
+  flashColorTrainRow: {r: 0, g: 0, b: 0, a: 0}
+  flickerFrequencyMinTrainColumn: 0
+  flickerFrequencyOffsetTrainColumn: 0
+  flashDurationTrainColumn: 0
+  flashIntervalTrainColumn: 0
+  flashColorTrainColumn: {r: 0, g: 0, b: 0, a: 0}
+  repeatTimesTest: 0
+  flickerFrequencyMinTestRow: 0
+  flickerFrequencyOffsetTestRow: 0
+  flashDurationTestRow: 0
+  flashIntervalTestRow: 0
+  flashColorTestRow: {r: 0, g: 0, b: 0, a: 0}
+  flickerFrequencyMinTestColumn: 0
+  flickerFrequencyOffsetTestColumn: 0
+  flashDurationTestColumn: 0
+  flashIntervalTestColumn: 0
+  flashColorTestColumn: {r: 0, g: 0, b: 0, a: 0}
   A: {fileID: 1788951779}
   B: {fileID: 1224716608}
   C: {fileID: 1336202885}
@@ -9411,13 +9434,6 @@ MonoBehaviour:
   Seven: {fileID: 2101209455}
   Eight: {fileID: 584818294}
   Nine: {fileID: 1470918175}
-  trainLetters: 
-  repeatTimesTrain: 0
-  flashDurationTrain: 0
-  flashIntervelTrain: 0
-  repeatTimesTest: 0
-  flashDurationTest: 0
-  flashIntervelTest: 0
   ContinueButton: {fileID: 759406188}
   gameManager: {fileID: 961943825}
 --- !u!1 &877653825
@@ -10098,11 +10114,27 @@ MonoBehaviour:
   gameState: 1
   trainLetters: 010000000200000008000000
   repeatTimesTrain: 5
-  flashDurationTrain: 0.1
-  flashIntervelTrain: 0.1
+  flickerFrequencyMinTrainRow: 6
+  flickerFrequencyOffsetTrainRow: 2
+  flashDurationTrainRow: 0.1
+  flashIntervalTrainRow: 0.1
+  flashColorTrainRow: {r: 0.3529412, g: 0, b: 1, a: 0}
+  flickerFrequencyMinTrainColumn: 6
+  flickerFrequencyOffsetTrainColumn: 2
+  flashDurationTrainColumn: 0.1
+  flashIntervalTrainColumn: 0.1
+  flashColorTrainColumn: {r: 1, g: 0.39215687, b: 0, a: 0}
   repeatTimesTest: 5
-  flashDurationTest: 0.1
-  flashIntervelTest: 0.1
+  flickerFrequencyMinTestRow: 6
+  flickerFrequencyOffsetTestRow: 2
+  flashDurationTestRow: 0.1
+  flashIntervalTestRow: 0.1
+  flashColorTestRow: {r: 0.3529412, g: 0, b: 1, a: 0}
+  flickerFrequencyMinTestColumn: 6
+  flickerFrequencyOffsetTestColumn: 2
+  flashDurationTestColumn: 0.1
+  flashIntervalTestColumn: 0.1
+  flashColorTestColumn: {r: 1, g: 0.39215687, b: 0, a: 0}
   StartTrainButton: {fileID: 1409825887}
   StartTestButton: {fileID: 821763127}
   IntroductionTextPanel: {fileID: 990701136}
