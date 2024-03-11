@@ -10122,23 +10122,23 @@ MonoBehaviour:
   flickerFrequencyOffsetTrainRow: 2
   flashDurationTrainRow: 0.1
   flashIntervalTrainRow: 0.1
-  flashColorTrainRow: {r: 0.3529412, g: 0, b: 1, a: 0}
+  flashColorTrainRow: {r: 0.3529412, g: 0, b: 1, a: 1}
   flickerFrequencyMinTrainColumn: 6
   flickerFrequencyOffsetTrainColumn: 2
   flashDurationTrainColumn: 0.1
   flashIntervalTrainColumn: 0.1
-  flashColorTrainColumn: {r: 1, g: 0.39215687, b: 0, a: 0}
+  flashColorTrainColumn: {r: 1, g: 0.39215687, b: 0, a: 1}
   repeatTimesTest: 5
   flickerFrequencyMinTestRow: 6
   flickerFrequencyOffsetTestRow: 2
   flashDurationTestRow: 0.1
   flashIntervalTestRow: 0.1
-  flashColorTestRow: {r: 0.3529412, g: 0, b: 1, a: 0}
+  flashColorTestRow: {r: 0.3529412, g: 0, b: 1, a: 1}
   flickerFrequencyMinTestColumn: 6
   flickerFrequencyOffsetTestColumn: 2
   flashDurationTestColumn: 0.1
   flashIntervalTestColumn: 0.1
-  flashColorTestColumn: {r: 1, g: 0.39215687, b: 0, a: 0}
+  flashColorTestColumn: {r: 1, g: 0.39215687, b: 0, a: 1}
   StartTrainButton: {fileID: 1409825887}
   StartTestButton: {fileID: 821763127}
   IntroductionTextPanel: {fileID: 990701136}
